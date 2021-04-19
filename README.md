@@ -2,12 +2,13 @@
 Virtual ticket agent to provide pass and routing information
 
 ## About
-
+This skill contains the necessary intent handlers to get route and pass information for users of public transportation systems
 
 ## Examples
 
+
 ## Credits
-Miles Maloney
+Miles Maloney, Natalie Malmgren, Andrew Plaza, Rachel Valdez-Diaz
 
 ## Category
 **Transport**
