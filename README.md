@@ -8,7 +8,7 @@ This skill contains the necessary intent handlers to get route and pass informat
 
 
 ## Credits
-Miles Maloney, Natalie Malmgren, Andrew Plaza, Rachel Valdez-Diaz
+Miles Maloney, Natalie Malmgren, Andrew Plaza, Rachel Valdez Diaz
 
 ## Category
 **Transport**
