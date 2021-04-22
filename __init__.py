@@ -2,6 +2,8 @@ from mycroft import MycroftSkill, intent_file_handler
 import sqlite3
 import googlemaps, geocoder
 from datetime import datetime
+import random
+import time
 
 class VirtualTicketAgent(MycroftSkill):
     def __init__(self):
