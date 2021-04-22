@@ -8,11 +8,9 @@ dependencies:
 # Pip dependencies on PyPI
    python:
      - requests
-     - gensim
      - googlemaps
      - geocoder
      - datetime
-     - sqlite3
 #
 #   # Install packages with the system package manager
 #   # This searches for the provided executable and uses the package names
