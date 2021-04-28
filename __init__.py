@@ -154,7 +154,7 @@ class VirtualTicketAgent(MycroftSkill):
                         self.speak('Your new account balance is ${}'.format(newBalance))
                         cur.execute('UPDATE Customer SET Balance = ? WHERE CustomerID =?', (newBalance, idNumber))
                         conn.commit()
-                        payload = {'Balance': newBalance}
+                        payload = {'CustomerID': customer[0], 'SavedPaymentInfo': customer[1], 'Name': customer[2], 'Balance': newBalance}
                         patchURL = self.serverURL + ' / patch'
                         r = requests.patch(patchURL, data = payload)
                         isValid = 1
@@ -212,7 +212,7 @@ class VirtualTicketAgent(MycroftSkill):
             cur.execute("UPDATE Customer SET Balance = ? WHERE CustomerID = ?", (balance, n,))
             conn.commit()
             patchURL = self.serverURL + ' / patch'
-            payload = {'Balance': balance}
+            payload = {'CustomerID': cust[0], 'SavedPaymentInfo': cust[1], 'Name': cust[2], 'Balance': balance}
             r = requests.patch(patchURL, payload)
             self.speak('Your balance is now ${}.'.format(balance))
 
