@@ -11,7 +11,7 @@ import json
 class VirtualTicketAgent(MycroftSkill):
     def __init__(self):
         MycroftSkill.__init__(self)
-        self.serverURL = "https://my-json-server.typicode.com/ajplaza31/end-to-end-demo"
+        self.serverURL = "https://my-json-server.typicode.com/ajplaza31/end-to-end-demo/Customer"
     
     #this intent handler is the default intent handler given by msk create
     @intent_file_handler('agent.ticket.virtual.intent')
