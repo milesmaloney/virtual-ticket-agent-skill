@@ -6,6 +6,7 @@ import random
 import time
 import requests
 from requests.exceptions import HTTPError
+import json
 
 class VirtualTicketAgent(MycroftSkill):
     def __init__(self):
@@ -153,8 +154,8 @@ class VirtualTicketAgent(MycroftSkill):
                         self.speak('Your new account balance is ${}'.format(newBalance))
                         cur.execute('UPDATE Customer SET Balance = ? WHERE CustomerID =?', (newBalance, idNumber))
                         conn.commit()
-                        payload = {"Balance": newBalance}
-                        r = requests.post(self.serverURL, data = payload)
+                        payload = {'Balance': newBalance}
+                        r = requests.post(self.serverURL, data = json.dumps.(payload))
                         isValid = 1
                         break
                     elif (customer == None):
@@ -209,8 +210,8 @@ class VirtualTicketAgent(MycroftSkill):
 
             cur.execute("UPDATE Customer SET Balance = ? WHERE CustomerID = ?", (balance, n,))
             conn.commit()
-            payload = {"Balance": balance}
-            r = requests.post(self.serverURL, data = payload)
+            payload = {'Balance': balance}
+            r = requests.post(self.serverURL, data = json.dumps(payload))
             self.speak('Your balance is now ${}.'.format(balance))
 
         self.speak("Have a great day!")
