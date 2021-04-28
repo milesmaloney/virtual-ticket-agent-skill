@@ -134,7 +134,7 @@ class VirtualTicketAgent(MycroftSkill):
 
             self.speak('You are about to purchase the following ticket: \n')
             self.speak(' {}. Start: {},  End: {},  ETA: {},  Cost: ${}.'.format(m, ticket[4], ticket[5], idrow[3], ticket[6]))
-            answer = self.ask_yesno("Would you like to proceed? (yes/no) ")
+            answer = self.ask_yesno("Would you like to proceed? ")
     
             idNumber = 0
             isValid = 0
