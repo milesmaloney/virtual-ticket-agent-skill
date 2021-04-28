@@ -155,7 +155,7 @@ class VirtualTicketAgent(MycroftSkill):
                         cur.execute('UPDATE Customer SET Balance = ? WHERE CustomerID =?', (newBalance, idNumber))
                         conn.commit()
                         payload = {'Balance': newBalance}
-                        r = requests.post(self.serverURL, data = json.dumps(payload))
+                        r = requests.patch(self.serverURL, data = payload)
                         isValid = 1
                         break
                     elif (customer == None):
@@ -211,7 +211,7 @@ class VirtualTicketAgent(MycroftSkill):
             cur.execute("UPDATE Customer SET Balance = ? WHERE CustomerID = ?", (balance, n,))
             conn.commit()
             payload = {'Balance': balance}
-            r = requests.post(self.serverURL, data = json.dumps(payload))
+            r = requests.patch(self.serverURL, payload)
             self.speak('Your balance is now ${}.'.format(balance))
 
         self.speak("Have a great day!")
