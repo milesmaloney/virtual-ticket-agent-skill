@@ -3,6 +3,8 @@ Virtual ticket agent to provide pass and routing information
 
 ## About
 This skill contains the necessary intent handlers to get route and pass information for users of public transportation systems
+**Requires the user to have a Google Maps API key. The Google Maps API key should be placed in a file named ".key.txt" in Picroft's /home/pi/.mycroft/skills/TransitRouting.
+
 
 ## Examples
 
