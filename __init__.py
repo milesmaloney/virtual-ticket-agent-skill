@@ -335,3 +335,124 @@ def formatTimeandDistance(tdData, departure, destination):
     #puts info together in string to be read by TTS
     tdString = "Leaving " + departure + " at " + depTime + ", you will get to " + destination + " at " + ETA + ". The trip will take " + duration + ". "
     return tdString
+
+
+#This class will handle interactions between the server and database 
+#during the Mycroft client's execution
+class DBServerUpdater:
+    def __init__(self, dbFile, serverURL):
+        self.dbFile = dbFile
+        self.serverURL = serverURL
+        self.lastUpdate = datetime.now()
+    
+    # #TODO:function to update database with information from the server
+    # def updateDatabase():
+
+    #TODO:function to update the server with information from the database
+    def updateServer(self):
+        #gets all the necessary data from the database to upload to the server
+        conn = sqlite3.connect(self.dbFile)
+        passData = self.getDatabaseFields(conn,"*", "PassData")
+        stationData = self.getDatabaseFields(conn, "*", "Station")
+        #routeData = self.getDatabaseFields(conn, "*", "RouteInfo")
+        customerData = self.getDatabaseFields(conn, "*", "Customer")
+        transitLineData = self.getDatabaseFields(conn, "*", "TransitLine")
+        
+        #creates a json payload for posting pass data
+        passDataPayload = []
+        for dataPiece in passData:
+            currPass = {
+                "PassID":str(dataPiece[0]),
+                "CustomerID":str(dataPiece[1]),
+                "PaymentReceipt":str(dataPiece[3]),
+                "LineID":str(dataPiece[4]),
+                "PassStart":str(dataPiece[5]),
+                "PassDestination":str(dataPiece[6]),
+                "Price":str(dataPiece[7]),
+                "IsValid":str(dataPiece[8])
+            }
+            passDataPayload.append(currPass)
+
+        #creates a json payload for posting station data
+        stationDataPayload = []
+        for dataPiece in stationData:
+            currStation = {
+                "StationID":str(dataPiece[0]),
+                "LineID":str(dataPiece[1])
+            }
+            stationDataPayload.append(currStation)
+        
+        #creates a json payload for posting customer data
+        customerDataPayload = []
+        for dataPiece in customerData:
+            currCustomer = {
+                "CustomerID":str(dataPiece[0]), 
+                "SavedPaymentInfo":str(dataPiece[1]), 
+                "Name":str(dataPiece[2]), 
+                "Balance":str(dataPiece[3]), 
+                "PhoneNo":str(dataPiece[4])
+            }
+            customerDataPayload.append(currCustomer)
+        
+        #creates a json payload for posting transit line data
+        transitDataPayload = []
+        for dataPiece in transitLineData:
+            currTransit = {
+                "LineID":str(dataPiece[0]), 
+                "IncomingStations":str(dataPiece[1]), 
+                "Destination":str(dataPiece[2]), 
+                "ETA":str(dataPiece[3]), 
+                "TransitType":str(dataPiece[4])
+            }
+        
+        #creates the overall payload that will go to the server
+        serverPayload = {
+            "Customer":customerDataPayload,
+            "PassData":passDataPayload,
+            "Station":stationDataPayload,
+            "TransitLine":transitDataPayload
+        }
+
+        #TODO: patch the server with this payload
+
+    #function to be run when querying database info to check if it is time to update
+    def updateScheduler(self):
+        currTime = datetime.now()
+        if currTime.strftime("%d") == self.lastUpdate.strftime("%d"):
+            #gets comparable integer times in minutes
+            currTime = int(currTime.strftime("%H")) * 60 + int(currTime.strftime("%M"))
+            lastTime = int(self.lastUpdate.strftime("%H")) * 60 + int(self.lastUpdate.strftime("%M"))
+            #checks how long it has been since last update (if >= 4 hours)
+            if (currTime - lastTime >= 240):
+                #updateDatabase() [TODO:updateDatabase method]
+                print("Update needed.")
+                #self.lastUpdate = datetime.now()
+#            else:
+#                print(str(currTime - lastTime) + " minutes since last update. No update needed.")
+
+        
+
+    def getDatabaseFields(self, conn, fields, table):
+        #initializes the query
+        query = "Select "
+
+        #adds the necessary fields to the query
+        for field in range(len(fields) - 1):
+            #adds fields to query w/ commas between fields (not including the last one)
+            query += fields[field] + ", "
+        #adds the final field to query (no trailing comma)
+        query += fields[len(fields) - 1]
+
+        #adds table we want to get data from to the query
+        query += " from " + table + " info"
+
+        #sends the sql query to the database connection
+        cursor = conn.execute(query)
+
+        #populates a list with received data from the database
+        answerList = []
+        for answer in cursor:
+            answerList.append(answer)
+        
+        #returns a list containing the data from the database
+        return answerList
