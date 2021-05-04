@@ -11,7 +11,7 @@ import json
 class VirtualTicketAgent(MycroftSkill):
     def __init__(self):
         MycroftSkill.__init__(self)
-        self.serverURL = "https://my-json-server.typicode.com/ajplaza31/end-to-end-demo/Customer"
+        self.serverURL = "https://my-json-server.typicode.com/ajplaza31/end-to-end-demo"
     
     #this intent handler is the default intent handler given by msk create
     @intent_file_handler('agent.ticket.virtual.intent')
@@ -154,9 +154,9 @@ class VirtualTicketAgent(MycroftSkill):
                         self.speak('Your new account balance is ${}'.format(newBalance))
                         cur.execute('UPDATE Customer SET Balance = ? WHERE CustomerID =?', (newBalance, idNumber))
                         conn.commit()
-                        payload = {'CustomerID': customer[0], 'SavedPaymentInfo': customer[1], 'Name': customer[2], 'Balance': newBalance}
-                        patchURL = self.serverURL + ' / patch'
-                        r = requests.patch(patchURL, data = payload)
+                    #    payload = {'CustomerID': customer[0], 'SavedPaymentInfo': customer[1], 'Name': customer[2], 'Balance': newBalance}
+                    #    patchURL = self.serverURL + ' / patch'
+                    #    r = requests.patch(patchURL, data = payload)
                         isValid = 1
                         break
                     elif (customer == None):
@@ -211,9 +211,9 @@ class VirtualTicketAgent(MycroftSkill):
 
             cur.execute("UPDATE Customer SET Balance = ? WHERE CustomerID = ?", (balance, n,))
             conn.commit()
-            patchURL = self.serverURL + ' / patch'
-            payload = {'CustomerID': cust[0], 'SavedPaymentInfo': cust[1], 'Name': cust[2], 'Balance': balance}
-            r = requests.patch(patchURL, payload)
+        #    patchURL = self.serverURL + ' / patch'
+        #    payload = {'CustomerID': cust[0], 'SavedPaymentInfo': cust[1], 'Name': cust[2], 'Balance': balance}
+        #    r = requests.patch(patchURL, payload)
             self.speak('Your balance is now ${}.'.format(balance))
 
         self.speak("Have a great day!")
@@ -414,6 +414,7 @@ class DBServerUpdater:
         }
 
         #TODO: patch the server with this payload
+        r = requests.put(serverURL, data = serverPayload)
 
     #function to be run when querying database info to check if it is time to update
     def updateScheduler(self):
