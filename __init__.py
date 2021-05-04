@@ -404,13 +404,17 @@ class DBServerUpdater:
                 "ETA":str(dataPiece[3]), 
                 "TransitType":str(dataPiece[4])
             }
+            transitDataPayload.append(currTransit)
         
+        profilePayload = ("name": "ajplaza31")
+
         #creates the overall payload that will go to the server
         serverPayload = {
             "Customer":customerDataPayload,
             "PassData":passDataPayload,
             "Station":stationDataPayload,
             "TransitLine":transitDataPayload
+            "profile":profilePayload
         }
 
         #TODO: patch the server with this payload
