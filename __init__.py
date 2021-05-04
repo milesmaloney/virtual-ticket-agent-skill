@@ -406,7 +406,7 @@ class DBServerUpdater:
             }
             transitDataPayload.append(currTransit)
         
-        profilePayload = ("name": "ajplaza31")
+        profilePayload = {"name": "ajplaza31"}
 
         #creates the overall payload that will go to the server
         serverPayload = {
