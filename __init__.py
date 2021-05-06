@@ -61,11 +61,15 @@ class VirtualTicketAgent(MycroftSkill):
                 self.speak('Ticket number {} : starts at {}, ends at {}, has an E.T.A of {}, and costs ${}.'.format(i, row[4], row[5], idrow[3], row[6]))
                 i += 1
 
-            n = int(self.get_response('These are all the tickets available. Which ticket would you like to select?'))
+            n = int(self.get_response('These are all the tickets available. Which ticket would you like to select? Please say the number: '))
             m = n
             n = n - 1
 
-            cur.execute("SELECT * FROM PassData LIMIT 1 OFFSET ?", (n,))
+            try: 
+                cur.execute("SELECT * FROM PassData LIMIT 1 OFFSET ?", (n,))
+            except:
+                self.speak("Sorry, that ticket does not exist. Please try again!")
+            
             ticket = cur.fetchone()
 
             cur.execute("SELECT * FROM TransitLine WHERE LineID = ?", (ticket[3],))
@@ -124,7 +128,7 @@ class VirtualTicketAgent(MycroftSkill):
         
         answer = "no"
         while (answer == "no"):
-            n = (int)(self.get_response('Which ticket would you like to select? '))
+            n = (int)(self.get_response('Which ticket would you like to select? Please say the number: '))
             m = n
             n = n - 1
 
@@ -132,7 +136,7 @@ class VirtualTicketAgent(MycroftSkill):
             try:
                 cur.execute("SELECT * FROM PassData LIMIT 1 OFFSET ?", (n,))
             except:
-                self.speak('Error: That ticket does not exist')
+                self.speak('Sorry, That ticket does not exist. Please try again.')
                 
             ticket = cur.fetchone()
 
@@ -142,7 +146,7 @@ class VirtualTicketAgent(MycroftSkill):
 
             self.speak('You are about to purchase the following ticket: \n')
             self.speak(' {}. Start: {},  End: {},  ETA: {},  Cost: ${}.'.format(m, ticket[4], ticket[5], idrow[3], ticket[6]))
-            answer = self.ask_yesno("Would you like to proceed? ")
+            answer = self.ask_yesno("Would you like to proceed? Please say yes or no: ")
     
             idNumber = 0
             isValid = 0
