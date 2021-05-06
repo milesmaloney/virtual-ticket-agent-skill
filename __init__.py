@@ -128,7 +128,12 @@ class VirtualTicketAgent(MycroftSkill):
             m = n
             n = n - 1
 
-            cur.execute("SELECT * FROM PassData LIMIT 1 OFFSET ?", (n,))
+
+            try:
+                cur.execute("SELECT * FROM PassData LIMIT 1 OFFSET ?", (n,))
+            except:
+                self.speak('Error: That ticket does not exist')
+                
             ticket = cur.fetchone()
 
             cur.execute("SELECT * FROM TransitLine WHERE LineID = ?", (ticket[3],))
